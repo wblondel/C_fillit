@@ -1,0 +1,14 @@
+language: c
+
+# Build options
+script:
+    - make
+
+# Builds
+os:
+    - osx
+    - linux
+
+compiler:
+    - gcc
+    - clang
