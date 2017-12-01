@@ -1,5 +1,5 @@
 # Compiler configuration
-CCC= gcc
+#CCC= gcc
 CFLAGS= -Wall -Wextra -Werror
 
 ## Flags for the C preprocessor
@@ -35,7 +35,7 @@ all: $(NAME)
 
 # Compiles fillit
 $(NAME): $(LIB)/$(LIB).a $(OBJ)
-	$(CCC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $(NAME) $(LDLIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $(NAME) $(LDLIBS)
 
 # Compiles libft/libft.a
 # It's a prerequisite to compile fillit
@@ -60,7 +60,7 @@ $(OBJ): | $(OBJ_PATH)
 
 # Compiles all the src/*.c into obj/*.o
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER)
-	$(CCC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # /!\ Dirty workaround /!\
 # If make on the libft directory should rebuild something then PHONY the rule
