@@ -15,7 +15,7 @@ NAME=fillit
 
 # Project related variables
 SRC_PATH = src
-SRC_NAME = main.c utils.c import.c create.c check.c show.c solve.c destroy.c\
+SRC_NAME = main.c utils.c import.c create.c check.c show.c show_d.c solve.c destroy.c\
 			calc.c identify.c
 
 OBJ_PATH = obj
