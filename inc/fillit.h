@@ -20,7 +20,11 @@
 ** *****************************************************************************
 */
 
-# include "libft.h"
+# include "basics/chars.h"
+# include "basics/strings.h"
+# include "basics/numbers.h"
+# include "basics/memory.h"
+# include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 

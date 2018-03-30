@@ -1,29 +1,40 @@
 # Compiler configuration
-#CCC= gcc
-CFLAGS= -Wall -Wextra -Werror
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
 ## Flags for the C preprocessor
-CPPFLAGS= -I$(SRC_PATH) -I$(LIB)
+CPPFLAGS = -I$(INC_PATH) -Ilibft/inc
 
 ## Libraries path
-LDFLAGS= -L$(LIB)
+LDFLAGS = -L$(LIBFT_PATH)
 
 ## Libraries to link into the executable
-LDLIBS= -lft
+LDLIBS = -lft
 
-NAME=fillit
+## Name of the executable
+NAME = fillit
 
 # Project related variables
 SRC_PATH = src
-SRC_NAME = main.c utils.c import.c create.c check.c show.c show_d.c solve.c destroy.c\
-			calc.c identify.c
+SRC_NAME = main.c utils.c import.c create.c check.c\
+		show.c show_d.c solve.c\
+		destroy.c\
+		calc.c identify.c
+SRC = $(addprefix $(SRC_PATH)/,$(SRC_NAME))
 
 OBJ_PATH = obj
 OBJ_NAME = $(SRC_NAME:.c=.o)
-SRC = $(addprefix $(SRC_PATH)/,$(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
-LIB = libft
-HEADER = $(SRC_PATH)/$(NAME).h $(SRC_PATH)/t_ref.h
+OBJS_DIRS = $(sort $(dir $(OBJ)))
+
+INC_PATH = inc
+INC_NAME =\
+		fillit.h\
+		t_ref.h
+
+HEADER = $(addprefix $(INC_PATH)/,$(INC_NAME))
+
+LIBFT_PATH = libft
 
 # Tracks malloc() and free()
 ifdef ALLOCWRAP
@@ -34,29 +45,22 @@ endif
 all: $(NAME)
 
 # Compiles fillit
-$(NAME): $(LIB)/$(LIB).a $(OBJ)
+$(NAME): $(LIBFT_PATH)/$(LIBFT_PATH).a $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $(NAME) $(LDLIBS)
 
 # Compiles libft/libft.a
 # It's a prerequisite to compile fillit
-$(LIB)/$(LIB).a:
-	$(MAKE) -C ./$(LIB)
+$(LIBFT_PATH)/$(LIBFT_PATH).a:
+	$(MAKE) -C ./$(LIBFT_PATH)
 
 # Creates obj/ directory
 # It's a prerequisite to compile any OBJ
-$(OBJ_PATH):
+$(OBJS_DIRS):
 	mkdir $@
 
-# Consider an example where your targets are to be placed in a separate
-# directory, and that directory might not exist before make is run.
-# In this situation, you want the directory to be created before any targets
-# are placed into it but, because the timestamps on directories change whenever
-# a file is added, removed, or renamed, we certainly don’t want to rebuild all
-# the targets whenever the directory’s timestamp changes. One way to manage
-# this is with order-only prerequisites: make the directory an order-only
-# prerequisite on all the targets:
-$(OBJ): | $(OBJ_PATH)
-
+# Adds the dependency to create the directory
+# before to compile an object
+$(OBJ): | $(OBJS_DIRS)
 
 # Compiles all the src/*.c into obj/*.o
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER)
@@ -65,18 +69,18 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER)
 # /!\ Dirty workaround /!\
 # If make on the libft directory should rebuild something then PHONY the rule
 # libft to build it. Otherwise it relink.
-ifeq ($(shell $(MAKE) --question -C ./$(LIB) ; echo $$?), 1)
-.PHONY: $(LIB)/$(LIB).a
+ifeq ($(shell $(MAKE) --question -C ./$(LIBFT_PATH) ; echo $$?), 1)
+.PHONY: $(LIBFT_PATH)/$(LIBFT_PATH).a
 endif
 
 
 .PHONY: clean
 clean:
-	$(MAKE) -C ./$(LIB) clean
+	$(MAKE) -C ./$(LIBFT_PATH) clean
 	$(RM) -r $(OBJ_PATH)
 
 fclean: clean
-	$(MAKE) -C ./$(LIB) fclean
+	$(MAKE) -C ./$(LIBFT_PATH) fclean
 	$(RM) -r $(NAME) $(NAME).dSYM
 
 re: fclean
@@ -85,6 +89,6 @@ re: fclean
 .PHONY: norme
 norme:
 	norminette $(SRC)
-	norminette $(HEADER)
-	norminette ./$(LIB)/*.c
-	norminette ./$(LIB)/*.h
+	norminette $(INC_PATH)
+	norminette $(LIBFT_PATH)/*.c
+	norminette $(LIBFT_PATH)/*.h
