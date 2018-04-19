@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import sys
 import random
 
@@ -8,7 +6,7 @@ dirTab = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
 def PrintPcs(pcs):
 	for line in pcs:
-		print ''.join(line)
+		print(''.join(line))
 
 def GenPcs(pcs, x, y):
 	pcs[y][x] = '#'
@@ -39,6 +37,7 @@ if __name__ == '__main__':
 				CreatePcs()
 				pcsNbr -= 1
 				if (pcsNbr):
-					print
+					print()
 	else:
-		print "Usage: ./PcsGen.py [pcsNbr]"
+		print("Usage: ./PcsGen.py [pcsNbr]")
+
